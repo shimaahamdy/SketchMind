@@ -1,0 +1,39 @@
+# Root repository ignore rules
+
+# Backend / .NET
+BE/**/bin/
+BE/**/obj/
+BE/**/Debug/
+BE/**/Release/
+BE/**/*.user
+BE/**/*.suo
+BE/**/appsettings*.json
+
+# Frontend / Angular app
+FE/**/node_modules/
+FE/**/dist/
+FE/**/.angular/
+FE/**/.vite/
+FE/**/coverage/
+FE/**/.sass-cache/
+FE/**/.cache/
+FE/**/*.log
+
+# IDE / editor files
+.vs/
+.idea/
+.vscode/
+*.swp
+*.swo
+*.tmp
+
+# Environment / secrets
+.env
+.env.*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
