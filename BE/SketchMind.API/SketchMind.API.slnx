@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="SketchMind.API/SketchMind.API.csproj" />
+  <Project Path="SketchMind.Application/SketchMind.Application.csproj" />
+  <Project Path="SketchMind.Domain/SketchMind.Domain.csproj" />
+  <Project Path="SketchMind.Infrastructure/SketchMind.Infrastructure.csproj" />
+</Solution>
