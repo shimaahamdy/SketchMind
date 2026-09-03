@@ -25,4 +25,8 @@
     <ProjectReference Include="..\SketchMind.Application\SketchMind.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\VectorStore\Mango\" />
+  </ItemGroup>
+
 </Project>
