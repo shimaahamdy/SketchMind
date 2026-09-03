@@ -40,5 +40,11 @@ namespace SketchMind.Infrastructure.DependencyInjection
 
             return services;
         }
+
+        public static IServiceCollection AddJWTAuthentication(this IServiceCollection services , IConfiguration configuraiton)
+        {
+           
+            return services;
+        }
     }
 }
