@@ -32,7 +32,7 @@ namespace SketchMind.Infrastructure.DependencyInjection
                 options.Password.RequireLowercase = true;
                 options.Password.RequireNonAlphanumeric = false;
             })
-                .AddRoles<IdentityRole<Guid>>()        // identity could have different roles and role id is Guid (string)
+                .AddRoles<IdentityRole<int>>()        
                 .AddEntityFrameworkStores<AppDbContext>(); // identiy will use appDbcontext to store on database
    
 

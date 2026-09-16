@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 namespace SketchMind.Infrastructure.Identity
 {
     // extend identityUser class for later use
-    public class ApplicationUser: IdentityUser<Guid>
+    public class ApplicationUser: IdentityUser<int>
     {
     }
 }
