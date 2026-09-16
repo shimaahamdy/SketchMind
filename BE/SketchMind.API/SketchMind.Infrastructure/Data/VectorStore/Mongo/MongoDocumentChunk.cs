@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SketchMind.Infrastructure.Data.VectorStore.Entites
+namespace SketchMind.Infrastructure.Data.VectorStore.Mongo
 {
-    public class DocumentChunk
+    // one mongo Document will represent one chunk
+    public class MongoDocumentChunk
     {
-        public Guid Id { get; set; }
-        public Guid UsertId { get; set; }
+       
+        public int ID { get; set; }
+        public int UsertId { get; set; }
         public int ChunkIndex { get; set; }
-        public Guid MaterialId { get; set; }
+        public int MaterialId { get; set; }
 
         public string Text { get; set; } = string.Empty;
 

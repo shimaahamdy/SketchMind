@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SketchMind.Application.Interfaces
+namespace SketchMind.Application.Interfaces.AI
 {
-    public interface IEmbeddingGenerator
+    public interface IVectorStore
     {
+   
     }
 }

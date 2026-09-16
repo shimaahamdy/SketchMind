@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace SketchMind.Infrastructure.AI.Embedding.DTOs
+{
+    public sealed class HuggingFaceOptions
+    {
+        public string Endpoint { get; set; } = string.Empty;
+        public string Model { get; set; } = string.Empty;
+        public string ApiKey { get; set; } = string.Empty;
+    }
+}
