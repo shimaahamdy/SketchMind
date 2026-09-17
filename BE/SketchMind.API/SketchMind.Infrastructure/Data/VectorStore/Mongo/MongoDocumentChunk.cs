@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,11 +9,12 @@ namespace SketchMind.Infrastructure.Data.VectorStore.Mongo
     // one mongo Document will represent one chunk
     public class MongoDocumentChunk
     {
-       
-        public int ID { get; set; }
-        public int UsertId { get; set; }
-        public int ChunkIndex { get; set; }
+        public int ID;
+        public int UserId { get; set; }
+
         public int MaterialId { get; set; }
+
+        public int ChunkIndex { get; set; }
 
         public string Text { get; set; } = string.Empty;
 
@@ -19,7 +22,8 @@ namespace SketchMind.Infrastructure.Data.VectorStore.Mongo
 
         public float[] Embedding { get; set; } = [];
 
-        public DateTime CreatedAt { get; set; }
+        public Dictionary<string, object>? Metadata { get; set; }
 
+        public DateTime CreatedAt { get; set; }
     }
 }

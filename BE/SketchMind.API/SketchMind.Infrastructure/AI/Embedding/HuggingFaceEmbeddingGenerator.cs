@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
-using SketchMind.Application.DTOs.AI;
-using SketchMind.Application.Interfaces.AI;
+using SketchMind.Application.ViewModels.AI;
+using SketchMind.Application.Contracts.AI;
 using SketchMind.Infrastructure.AI.Embedding.DTOs;
 using System;
 using System.Collections.Generic;

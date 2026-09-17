@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SketchMind.Application.Interfaces.Documents
+namespace SketchMind.Application.Contracts.Documents
 {
     public interface IDocumentTextExtractor
     {

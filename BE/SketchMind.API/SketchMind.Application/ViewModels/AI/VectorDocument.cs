@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SketchMind.Application.DTOs.AI
+namespace SketchMind.Application.ViewModels.AI
 {
-    internal class VectorDocument
+    public class VectorDocument
     {
         public int Id { get; init; }
         public int UserId { get; init; }

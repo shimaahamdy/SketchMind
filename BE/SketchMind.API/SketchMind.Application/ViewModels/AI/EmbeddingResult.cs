@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SketchMind.Application.DTOs.AI
+namespace SketchMind.Application.ViewModels.AI
 {
     public sealed class EmbeddingResult
     {

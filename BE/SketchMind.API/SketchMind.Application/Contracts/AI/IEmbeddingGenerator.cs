@@ -1,9 +1,9 @@
-﻿using SketchMind.Application.DTOs.AI;
+﻿using SketchMind.Application.ViewModels.AI;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SketchMind.Application.Interfaces.AI
+namespace SketchMind.Application.Contracts.AI
 {
     public interface IEmbeddingGenerator
     {
