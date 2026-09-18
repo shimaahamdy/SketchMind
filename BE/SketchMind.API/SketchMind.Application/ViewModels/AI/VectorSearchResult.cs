@@ -6,7 +6,7 @@ namespace SketchMind.Application.ViewModels.AI
 {
     public sealed class VectorSearchResult
     {
-        public int ChunkId { get; init; }
+        public string ChunkId { get; init; } = string.Empty;
 
         public int MaterialId { get; init; }
 

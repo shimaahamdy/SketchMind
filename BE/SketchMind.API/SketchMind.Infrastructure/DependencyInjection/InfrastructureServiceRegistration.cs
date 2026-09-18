@@ -2,8 +2,18 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
+using SketchMind.Application.Contracts.AI;
+using SketchMind.Application.Repos;
+using SketchMind.Infrastructure.AI.Embedding;
+using SketchMind.Infrastructure.AI.Embedding.DTOs;
 using SketchMind.Infrastructure.Data;
+using SketchMind.Infrastructure.Data.Repos;
+using SketchMind.Infrastructure.Data.VectorStore.Mongo;
 using SketchMind.Infrastructure.Identity;
+using System.Net.Http.Headers;
+
 
 
 namespace SketchMind.Infrastructure.DependencyInjection
@@ -34,11 +44,75 @@ namespace SketchMind.Infrastructure.DependencyInjection
             })
                 .AddRoles<IdentityRole<int>>()        
                 .AddEntityFrameworkStores<AppDbContext>(); // identiy will use appDbcontext to store on database
-   
 
 
+            AddMongoConfiguration(services, configuration);
+
+            AddHuggingFaceConfiguration(services, configuration);
+
+            AddHttpClientConfigurationForHuggingFace(services, configuration);
+
+
+            services.AddScoped<IMaterialRepository, MaterialRepository>();
 
             return services;
         }
+
+        private static IServiceCollection AddMongoConfiguration(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<MongoDbOptions>(configuration.GetSection("MongoDB"));
+
+            services.AddSingleton<IMongoClient>(sp =>
+            {
+                var options = sp
+                    .GetRequiredService<IOptions<MongoDbOptions>>()
+                    .Value;
+
+                return new MongoClient(options.ConnectionString);
+            });
+
+            services.AddSingleton<IMongoDatabase>(sp =>
+            {
+                var options = sp
+                    .GetRequiredService<IOptions<MongoDbOptions>>()
+                    .Value;
+
+                var client = sp.GetRequiredService<IMongoClient>();
+
+                return client.GetDatabase(options.DatabaseName);
+            });
+
+
+            services.AddScoped<IVectorStore, MongoVectorStore>();
+
+            return services;
+
+        }
+
+        private static IServiceCollection AddHuggingFaceConfiguration(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<HuggingFaceOptions>(configuration.GetSection("HuggingFace"));
+            return services;
+
+        }
+
+        private static IServiceCollection AddHttpClientConfigurationForHuggingFace(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddHttpClient<IEmbeddingGenerator, HuggingFaceEmbeddingGenerator>((sp, client) =>
+            {
+                var options = sp
+           .GetRequiredService<IOptions<HuggingFaceOptions>>()
+           .Value;
+                
+                client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", options.ApiKey);
+            });
+
+            return services;
+        }
+       
+
+
+
     }
 }

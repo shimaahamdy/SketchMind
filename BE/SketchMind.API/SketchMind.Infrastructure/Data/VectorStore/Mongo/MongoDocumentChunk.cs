@@ -9,7 +9,7 @@ namespace SketchMind.Infrastructure.Data.VectorStore.Mongo
     // one mongo Document will represent one chunk
     public class MongoDocumentChunk
     {
-        public int ID;
+        public string ID { get; set; } = string.Empty;
         public int UserId { get; set; }
 
         public int MaterialId { get; set; }

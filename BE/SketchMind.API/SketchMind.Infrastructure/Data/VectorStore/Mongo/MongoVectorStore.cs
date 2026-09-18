@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using SketchMind.Application.Contracts.AI;
 using SketchMind.Application.ViewModels.AI;
@@ -13,11 +14,14 @@ namespace SketchMind.Infrastructure.Data.VectorStore.Mongo
     {
         private readonly IMongoCollection<MongoDocumentChunk> _collection;
 
-        public MongoVectorStore(IMongoDatabase database)
+        // get collecction data from Database
+        public MongoVectorStore(IMongoDatabase database,IOptions<MongoDbOptions> options)
         {
             _collection = database.GetCollection<MongoDocumentChunk>(
-                "DocumentChunks");
+                options.Value.CollectionName);
         }
+
+
 
         internal void ConfigureIndexes()
         {
@@ -32,13 +36,18 @@ namespace SketchMind.Infrastructure.Data.VectorStore.Mongo
         {
             return new MongoDocumentChunk
             {
-                ID = source.Id,
+                ID = $"{source.MaterialId}_{source.ChunkIndex}",
+
                 UserId = source.UserId,
                 MaterialId = source.MaterialId,
                 ChunkIndex = source.ChunkIndex,
                 Text = source.Text,
                 PageNumber = source.PageNumber,
                 Embedding = source.Embedding,
+
+                Metadata = source.Metadata?
+            .ToDictionary(x => x.Key, x => x.Value),
+
                 CreatedAt = DateTime.UtcNow
             };
         }
@@ -73,6 +82,79 @@ namespace SketchMind.Infrastructure.Data.VectorStore.Mongo
 
 
 
+        }
+
+        public async Task<IReadOnlyList<VectorSearchResult>> SearchAsync(VectorSearchQuery query,
+            CancellationToken cancellationToken)
+        {
+
+            // create victor search similarty using specific index
+            var vectorSearchStage = new BsonDocument("$vectorSearch",
+                new BsonDocument
+                {
+                    { "index", "document_chunks_vector_index" },  // index name
+                    { "path", "embedding" },  // Search against the embedding field.
+                    { "queryVector", new BsonArray(query.QueryVector) },  // value used to search
+                    { "numCandidates", query.TopK * 10 },  // # documents to search within
+                    { "limit", query.TopK },    // result 
+                    {
+                        "filter",                      // define filter using userID
+                        new BsonDocument(
+                            "userId",
+                            query.UserId)
+                    }
+                });
+
+            // result will be returned 
+            var projectStage = new BsonDocument("$project",
+                new BsonDocument
+                {
+                    { "_id", 1 },
+                    { "materialId", 1 },
+                    { "text", 1 },
+                    { "pageNumber", 1 },
+                    {
+                        "similarity",
+                        new BsonDocument(
+                            "$meta",
+                            "vectorSearchScore")
+                    }
+                });
+
+            // phased of search and reterival configuration
+            // MongoDB Aggregation Pipeline
+            var pipeline = new[]
+            {
+                vectorSearchStage,
+                projectStage
+            };
+
+            // Execute this aggregation pipeline against the collection
+
+            var results = await _collection
+                .Aggregate<MongoDocumentChunk>(pipeline)
+                .ToListAsync(cancellationToken);
+
+            return results
+                .Select(x => new VectorSearchResult
+                {
+                    ChunkId = x.ID,
+                    MaterialId = x.MaterialId,
+                    Text = x.Text,
+                    PageNumber = x.PageNumber
+                })
+                .ToList();
+        }
+
+        public async Task DeleteByMaterialIdAsync(int materialId, CancellationToken cancellationToken)
+        {
+            var filter = Builders<MongoDocumentChunk>
+                .Filter
+                .Eq(x => x.MaterialId, materialId);
+
+            await _collection.DeleteManyAsync(
+                filter,
+                cancellationToken);
         }
 
 

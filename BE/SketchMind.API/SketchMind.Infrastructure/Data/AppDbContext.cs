@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SketchMind.Domain.Entities;
 using SketchMind.Infrastructure.Identity;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 
 namespace SketchMind.Infrastructure.Data
@@ -19,6 +21,9 @@ namespace SketchMind.Infrastructure.Data
         {
         }
 
+        public virtual DbSet<Material> Materials { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -26,4 +31,7 @@ namespace SketchMind.Infrastructure.Data
             // Domain entity configurations will go here later
         }
     }
+
+
 }
+

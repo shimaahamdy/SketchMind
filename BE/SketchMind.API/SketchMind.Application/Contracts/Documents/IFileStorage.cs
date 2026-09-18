@@ -6,13 +6,18 @@ namespace SketchMind.Application.Contracts.Documents
 {
     public interface IFileStorage
     {
-        // method to save file 
-       Task<string> SaveAsync(string fileName, string contentType, CancellationToken cancellationToken);
+        Task<string> SaveAsync(
+               Stream file,
+               string fileName,
+               string contentType,
+               CancellationToken cancellationToken);
 
-        // mehtod to read file 
-        //Task<> ReadAsync(string filePath, CancellationToken cancellationToken);
+        Task<Stream> OpenReadAsync(
+            string storagePath,
+            CancellationToken cancellationToken);
 
-        // method to delte file 
-        Task DeleteAsync(string filePath, CancellationToken cancellationToken);
+        Task DeleteAsync(
+            string storagePath,
+            CancellationToken cancellationToken);
     }
 }

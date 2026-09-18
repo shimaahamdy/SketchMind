@@ -9,5 +9,6 @@ namespace SketchMind.Infrastructure.AI.Embedding.DTOs
         public string Endpoint { get; set; } = string.Empty;
         public string Model { get; set; } = string.Empty;
         public string ApiKey { get; set; } = string.Empty;
+        public int BatchSize { get; set; } = 32;
     }
 }
